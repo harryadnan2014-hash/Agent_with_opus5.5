@@ -281,7 +281,17 @@ def submit_report(
             "INSERT INTO report_symptoms (report_id, symptom_id) VALUES (?, ?)",
             [(report_id, s) for s in symptom_ids],
         )
-    return {"id": report_id, "redacted": redacted}
+        published = auto_approve()
+        if published:
+            # Public straight away; the administrator can still reject or flag it later.
+            conn.execute("UPDATE reaction_reports SET status = 'approved' WHERE id = ?", (report_id,))
+            _ensure_entries(conn, report_id)
+    return {"id": report_id, "redacted": redacted, "published": published}
+
+
+def auto_approve() -> bool:
+    """Publish reports immediately (default) or hold them for review (DRUGSCOPE_AUTO_APPROVE=0)."""
+    return (os.getenv("DRUGSCOPE_AUTO_APPROVE") or "1").strip().lower() not in ("0", "false", "no", "off")
 
 
 def my_reports(principal: Principal) -> list[dict[str, Any]]:

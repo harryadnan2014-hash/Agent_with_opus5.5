@@ -586,3 +586,11 @@ def test_running_app_upgrades_schema_without_restart(tmp_path, monkeypatch):
     assert errors == []
     with connect() as c:
         assert c.execute("PRAGMA user_version").fetchone()[0] == len(db.MIGRATIONS)
+
+
+def test_reports_publish_immediately_by_default(make_user, monkeypatch):
+    monkeypatch.setenv("DRUGSCOPE_AUTO_APPROVE", "1")
+    result = _report(make_user(), context="my private note")
+    assert result["published"]
+    entries = service.public_entries()
+    assert entries and entries[0]["reports"] == 1 and "context" not in entries[0]

@@ -10,6 +10,7 @@ handle that resolves to a retrieved record.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Any
 
@@ -1041,7 +1042,18 @@ def startup() -> list[str]:
 ASSETS = Path(__file__).resolve().parent / "assets"
 
 
+def load_cloud_secrets() -> None:
+    """On Streamlit Cloud, settings live in Secrets, not .env - expose them the same way."""
+    try:
+        for key, value in st.secrets.items():
+            if isinstance(value, (str, int, float)) and not os.getenv(key):
+                os.environ[key] = str(value)
+    except Exception:  # noqa: BLE001 - no secrets file locally is normal
+        pass
+
+
 def main() -> None:
+    load_cloud_secrets()
     theme.inject()
     st.logo(str(ASSETS / "logo.svg"), size="large", icon_image=str(ASSETS / "icon.svg"))
     for notice in startup():

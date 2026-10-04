@@ -18,6 +18,7 @@ def fresh_db(tmp_path, monkeypatch):
     monkeypatch.setenv("DRUGSCOPE_FREE_CREDITS", "5")
     monkeypatch.setenv("DRUGSCOPE_PRO_CREDITS", "60")
     monkeypatch.setenv("DRUGSCOPE_QUOTA_WINDOW_HOURS", "24")
+    monkeypatch.setenv("DRUGSCOPE_AUTO_APPROVE", "0")  # tests exercise moderation explicitly
     db.reset_for_tests()
     yield
     db.reset_for_tests()

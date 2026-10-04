@@ -135,6 +135,10 @@ def authenticate(username: str, password: str) -> Principal:
     username = (username or "").strip()
     if not username or not password:
         raise AuthError("Enter your username and password.")
+    if _admin_username() and username.lower() == _admin_username().lower():
+        # Settings may have changed since the app started (e.g. cloud secrets added
+        # later) - make sure the admin account matches them before checking.
+        bootstrap_admin()
     with connect() as conn:
         if _locked_out(conn, username):
             raise AuthError(

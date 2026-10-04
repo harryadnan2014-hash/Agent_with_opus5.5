@@ -396,9 +396,9 @@ def report_form(report_type: str, key: str) -> None:
                    "Emails, phone numbers and links are removed automatically. Only the administrator "
                    "can read individual reports.")
         consent = st.checkbox(
-            "I consent to this report being stored for research. I understand it will be reviewed "
-            "before it counts publicly, only aggregated counts are shown to others, and I can delete "
-            "it from my Account page.", key=f"{key}-consent",
+            "I consent to this report being stored for research. I understand it counts publicly "
+            "straight away, only aggregated counts are shown to others (never my notes), and I can "
+            "delete it from my Account page.", key=f"{key}-consent",
         )
         submitted = st.form_submit_button("Submit report", type="primary", width="stretch")
 
@@ -418,7 +418,8 @@ def report_form(report_type: str, key: str) -> None:
         except (service.ValidationError, service.RateLimited, PermissionDenied) as exc:
             st.error(str(exc))
             return
-        st.success("Thank you - your report is saved and will count publicly once an administrator approves it.")
+        st.success("Thank you - your report is now public in the Community counts." if result.get("published")
+                   else "Thank you - your report is saved and will count publicly once an administrator approves it.")
         if result["redacted"]:
             st.info("Contact details or links in your context were removed before saving.")
         if severity == "severe":
@@ -622,7 +623,7 @@ def _drug_pair(a: dict[str, Any], b: dict[str, Any]) -> None:
 # --------------------------------------------------------------------------- #
 
 def report_page() -> None:
-    _intro("Report", "Report a side effect", "Your experience, reviewed before it counts - never published "
+    _intro("Report", "Report a side effect", "Free for everyone - your report counts publicly straight away, never shown "
            "individually.")
     report_form("side_effect", "side")
 
