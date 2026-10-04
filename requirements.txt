@@ -1,0 +1,12 @@
+# DrugScope — core runtime
+streamlit>=1.64.0      # lazy tabs, sidebar logo and keyed popovers need 1.64
+anthropic>=1.8.0
+langgraph>=1.0          # the pipeline runs as a LangGraph state graph
+httpx>=0.27.0
+pandas>=2.2.0
+plotly>=5.24.0
+python-dotenv>=1.0.1
+pypdf>=5.0.0            # text extraction from uploaded PDFs
+Authlib>=1.3.2          # Google sign-in (st.login); only used when secrets.toml configures it
+python-pptx>=1.0        # downloadable presentations
+python-docx>=1.1        # downloadable Word reports

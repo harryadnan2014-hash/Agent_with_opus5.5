@@ -1,0 +1,32 @@
+# Streamlit chrome, matched to drugscope/ui/theme.py so the app frame and the
+# charts paint from one palette. `base` is also what theme.active_theme() reads,
+# so changing it here switches both at once.
+
+[theme]
+base = "dark"
+primaryColor = "#4c8dff"
+backgroundColor = "#090b11"
+secondaryBackgroundColor = "#141823"
+textColor = "#f3f5f9"
+font = "sans-serif"
+baseRadius = "0.7rem"
+borderColor = "#222836"
+
+[theme.sidebar]
+backgroundColor = "#0c0f16"
+secondaryBackgroundColor = "#141823"
+
+[server]
+headless = true
+# run.bat starts the app on localhost only (it stores accounts and health reports).
+# The address is set there rather than here so hosted deployments such as Streamlit
+# Community Cloud, which manage their own address, keep working.
+fileWatcherType = "auto"
+maxUploadSize = 20
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+showErrorDetails = true
